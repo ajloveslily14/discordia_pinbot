@@ -1,15 +1,12 @@
 discordia = require('discordia')
-json = require('json')
-timer = require('timer')
 fs = require('fs')
 client = discordia.Client()
-discordia.extensions.string()
 
 
 
 key = fs.readFileSync("key.txt","r") -- Put the key for the bot in a file in the same directory as main.lua
 
-config = require('config')
+config = require('config') -- put a file named config.lua in the same directory as this file, copy from example config.
 
 require('util')
 
@@ -64,37 +61,15 @@ function isValidPin(react,srv)
 end
 
 function doReact(react,user)
-	-- local person = g:getMember(user)
-	-- local msg = react.message
-	-- local allowed
-	-- if not person then return end
-	-- for k,_ in pairs(adminRoles) do
-	-- 	if person:hasRole(k) then
-	-- 		allowed = true
-	-- 		break
-	-- 	end
-	-- end
-
-	-- if msg.channel ~= pinChannel and react.emojiName == '📌' and react.count <= 1 and allowed then
-	-- 	local cg = g:getChannel(pinChannel)
-	-- 	local reply = handlePin(msg,person)
-	-- 	if not reply then return end
-	-- 	cg:send({embed = reply, content = msg.link})
-	-- end
 	local msg = react.message
 	local srv = msg.guild
 	local mem = msg.member
 	local pm = srv:getMember(user)
 	if not msg.member then return end
-	print("passed membercheck")
 	if not srv then return end
-	print("passed guild check")
 	if not hasCfg(srv) then return end --Let's make sure there's actually a config entry for this server
-	print("passed config")
 	if not isValidPin(react,srv) then return end --Is this a pin reaction?
-	print("passed valid pin")
 	if not hasPerm(pm,srv) then return end --Does the reaction adder have permission to create a pin?
-	print("passed perm")
 	local cfg = config.servers[srv.id]
 	local reply = handlePin(msg,pm)
 	if reply then
