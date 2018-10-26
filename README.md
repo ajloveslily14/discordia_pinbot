@@ -4,11 +4,9 @@
 
 * Install Discordia `lit install SinisterRectus/discordia`
 
-* Get either your user token or bot token
+* Get bot token
 
-  * For bot token put it in botkey.txt
-
-  * for user token put it in key.txt
+  * put token in key.txt
   
 * Clone this repo `git clone git@github.com:ajloveslily14/discordia_pinbot.git`
 
