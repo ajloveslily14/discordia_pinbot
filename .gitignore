@@ -1,0 +1,6 @@
+deps/*
+luvit.exe
+key.txt
+discordia.log
+gateway.json
+config.lua
