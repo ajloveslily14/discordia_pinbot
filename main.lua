@@ -55,7 +55,7 @@ end
 function isValidPin(react,srv)
 	local msg = react.message
 	if msg.channel == config.servers[srv.id].pinChannel then return end
-	if react.emojiName ~= '📌' then return end
+	if react.emojiName ~= "\240\159\147\140" then return end
 	if react.count > 1 then return end
 	return true
 end
