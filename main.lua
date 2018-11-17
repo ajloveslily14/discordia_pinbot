@@ -90,7 +90,7 @@ client:on("reactionAddUncached",function(chan,mid,_,userid)
 			break
 		end
 	end
-
+	if not ref then return end
 	doReact(ref,userid)
 end)
 
