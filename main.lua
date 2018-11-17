@@ -63,6 +63,7 @@ end
 function doReact(react,user)
 	local msg = react.message
 	local srv = msg.guild
+	if not srv then return end
 	local mem = msg.member
 	local pm = srv:getMember(user)
 	if not msg.member then return end
@@ -79,6 +80,19 @@ function doReact(react,user)
 end
 
 client:on("reactionAdd",doReact)
+
+client:on("reactionAddUncached",function(chan,mid,_,userid)
+	local ref
+	local msg = chan:getMessage(mid)
+	for react in msg.reactions:iter() do
+		if react.emojiName == "\240\159\147\140" then
+			ref = react
+			break
+		end
+	end
+
+	doReact(ref,userid)
+end)
 
 client:run("Bot "..key)
 
