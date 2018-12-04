@@ -82,7 +82,12 @@ client:on("reactionAdd",doReact)
 
 client:on("reactionAddUncached",function(chan,mid,_,userid)
 	local ref
-	local msg = chan:getMessage(mid)
+	local msg,err = chan:getMessage(mid)
+	if err then 
+		chan:send("There was an error pinning a post, please check console!") 
+		print("There was an error for some reason in reactionAddUncached: "..err) 
+		return 
+	end
 	for react in msg.reactions:iter() do
 		if react.emojiName == "\240\159\147\140" then
 			ref = react
