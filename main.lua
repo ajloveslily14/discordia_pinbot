@@ -80,22 +80,19 @@ end
 
 client:on("reactionAdd",doReact)
 
-client:on("reactionAddUncached",function(chan,mid,_,userid)
+client:on("reactionAddUncached",function(chan,mid,hash,userid)
+	if hash ~= "\240\159\147\140" then return end
 	local ref
-	local msg,err = chan:getMessage(mid)
-	if err then 
-		chan:send("There was an error pinning a post, please check console!") 
-		print("There was an error for some reason in reactionAddUncached: "..err) 
-		return 
-	end
+	local msg = chan:getMessage(mid)
 	for react in msg.reactions:iter() do
-		if react.emojiName == "\240\159\147\140" then
+		if react.emojiName == hash then
 			ref = react
 			break
 		end
 	end
-	if not ref then return end
-	doReact(ref,userid)
+	if ref and ref.count <= 1 then
+		doReact(ref,userid)
+	end
 end)
 
 client:run("Bot "..key)
