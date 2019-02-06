@@ -98,6 +98,5 @@ end)
 client:run("Bot "..key)
 
 client:on('ready',function() 
-	print("loaded!!") 
-	g = client:getGuild(guild)
+	print("Logged in as "..client.user.username) 
 end)
