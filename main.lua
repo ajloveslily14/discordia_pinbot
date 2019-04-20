@@ -64,9 +64,8 @@ function doReact(react,user)
 	local msg = react.message
 	local srv = msg.guild
 	if not srv then return end
-	local mem = msg.member
 	local pm = srv:getMember(user)
-	if not msg.member then return end
+	if not pm then return end -- make sure there's a member attached to the reaction to check perms
 	if not hasCfg(srv) then return end --Let's make sure there's actually a config entry for this server
 	if not isValidPin(react,srv) then return end --Is this a pin reaction?
 	if not hasPerm(pm,srv) then return end --Does the reaction adder have permission to create a pin?
