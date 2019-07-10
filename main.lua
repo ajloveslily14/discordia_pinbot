@@ -1,14 +1,14 @@
-discordia = require('discordia')
-fs = require('fs')
+discordia = require("discordia")
+fs = require("fs")
 client = discordia.Client()
 
 
 
 key = fs.readFileSync("key.txt","r") -- Put the key for the bot in a file in the same directory as main.lua
 
-config = require('config') -- put a file named config.lua in the same directory as this file, copy from example config.
+config = require("config") -- put a file named config.lua in the same directory as this file, copy from example config.
 
-require('util')
+require("util")
 
 
 
@@ -96,6 +96,6 @@ end)
 
 client:run("Bot "..key)
 
-client:on('ready',function() 
+client:on("ready",function() 
 	print("Logged in as "..client.user.username) 
 end)
