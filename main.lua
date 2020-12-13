@@ -8,26 +8,33 @@ key = fs.readFileSync("key.txt","r") -- Put the key for the bot in a file in the
 
 config = require("config") -- put a file named config.lua in the same directory as this file, copy from example config.
 
-require("util")
 
-
+function isImg(str)
+	if str:find(".jpg") then return true end
+	if str:find(".jpeg") then return true end
+	if str:find(".png") then return true end
+	if str:find(".gif") then return true end
+	return false
+end
 
 function handlePin(msg,person)
 	if not msg.member then return end --For some reason there needs to be a check here too.
-	local p = newEmbed()
+	local p = {}
 
-	p:addAuthor()
-	p:setAuthor(msg.member.name)
-	p:setColor(msg.member:getColor())
-	p:setDescription(msg.content)
+	p.author = {}
+	p.author.name = msg.member.name
+	p.color = msg.member:getColor().value or math.random(0xFFFFFF)
+	p.description = msg.content
 	if msg.attachment and isImg(msg.attachment.filename) then
-		p:addImage()
-		p:setImage(msg.attachment.url)
+		p.image = {url=msg.attachment.url}
 	end
 
-	p:addFooter()
-	p:setFooter("Pinned by "..person.name..", sent")
-	p:setTimestamp(msg.timestamp)
+	p.footer = {text="Pinned by "..person.name..", sent"}
+	p.timestamp = msg.timestamp
+	p.fields = {}
+	p.fields[1] = {}
+	p.fields[1].name = "Original"
+	p.fields[1].value = "[Jump!]("..msg.link..")"
 	return p
 end
 
@@ -37,19 +44,11 @@ function hasCfg(srv)
 	if not config.servers[id] then return false end
 	local cfg = config.servers[id]
 	if not cfg.pinChannel then return false end
-	if not cfg.adminRoles then return false end
 	return true
 end
 
-function hasPerm(mem,srv)
-	local ok = false
-	for k,_ in next,config.servers[srv.id].adminRoles do
-		if mem:hasRole(k) then
-			ok = true
-			break
-		end
-	end
-	return ok
+function hasPerm(mem,chan)
+	return mem:hasPermission(chan,"manageMessages")
 end
 
 function isValidPin(react,srv)
@@ -68,12 +67,12 @@ function doReact(react,user)
 	if not pm then return end -- make sure there's a member attached to the reaction to check perms
 	if not hasCfg(srv) then return end --Let's make sure there's actually a config entry for this server
 	if not isValidPin(react,srv) then return end --Is this a pin reaction?
-	if not hasPerm(pm,srv) then return end --Does the reaction adder have permission to create a pin?
+	if not hasPerm(pm,react.channel) then return react:delete(user) end --Does the reaction adder have permission to create a pin? If not delete the reaction.
 	local cfg = config.servers[srv.id]
 	local reply = handlePin(msg,pm)
 	if reply then
 		local chan = srv:getChannel(cfg.pinChannel)
-		chan:send({embed = reply, content = msg.link})
+		chan:send({embed = reply})
 	end
 end
 

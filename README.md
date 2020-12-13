@@ -10,4 +10,6 @@
   
 * Clone this repo `git clone git@github.com:ajloveslily14/discordia_pinbot.git`
 
+* Configure config.lua
+
 * Run `./luvit main.lua`
