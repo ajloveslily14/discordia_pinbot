@@ -23,6 +23,7 @@ function handlePin(msg,person)
 
 	p.author = {}
 	p.author.name = msg.member.name
+	p.author.icon_url = msg.member.user.avatarURL
 	p.color = msg.member:getColor().value or math.random(0xFFFFFF)
 	p.description = msg.content
 	if msg.attachment and isImg(msg.attachment.filename) then
